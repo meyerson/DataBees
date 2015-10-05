@@ -4,6 +4,7 @@ import luigi.mock
 import time
 import pandas as pd
 from settings import base
+import glob
 
 class ImageNorm(BaseTask):
 
@@ -11,16 +12,20 @@ class ImageNorm(BaseTask):
     test_dir = luigi.Parameter(default='./test')
     train_dir = luigi.Parameter(default='./train')
 
-    def complete(self):
-        return False
+    # def complete(self):
+    #     return False
 
     def run(self):
         print('run')
         
 
         #unzip ndocs
-        images = [x for x in glob.glob(self.train)]
+        print(self.train)
+        images = [x for x in glob.glob(self.train_dir)]
         print(images)
         #normalize one at a time
 
         #save somewhere
+
+if __name__ == '__main__':
+    luigi.run()
