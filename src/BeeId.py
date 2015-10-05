@@ -5,12 +5,14 @@ import time
 import pandas as pd
 from settings import base
 import glob
+import os
+
 
 class ImageNorm(BaseTask):
 
     ndocs = luigi.IntParameter(default=10)
-    test_dir = luigi.Parameter(default='./test')
-    train_dir = luigi.Parameter(default='./train')
+    test_dir = luigi.Parameter(default='test')
+    train_dir = luigi.Parameter(default='train')
 
     # def complete(self):
     #     return False
@@ -20,8 +22,8 @@ class ImageNorm(BaseTask):
         
 
         #unzip ndocs
-        print(self.train)
-        images = [x for x in glob.glob(self.train_dir)]
+        print(self.train_dir)
+        images = [x for x in glob.glob(os.path.join(base.BEEHOME,self.train_dir+'/*'))]
         print(images)
         #normalize one at a time
 
