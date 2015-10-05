@@ -3,7 +3,6 @@ import luigi
 import luigi.mock
 import time
 import pandas as pd
-import networkx as nx
 from settings import base
 
 class ImageNorm(BaseTask):
