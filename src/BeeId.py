@@ -22,7 +22,7 @@ class ImageNorm(BaseTask):
         
 
         #unzip ndocs
-        print(self.train_dir)
+        print((os.path.join(base.BEEHOME,self.train_dir+'/*')))
         images = [x for x in glob.glob(os.path.join(base.BEEHOME,self.train_dir+'/*'))]
         print(images)
         #normalize one at a time
