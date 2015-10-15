@@ -6,6 +6,7 @@ import pandas as pd
 from settings import base
 import glob
 import os
+from BeeId_helper import img_to_matrix
 
 
 class ImageNorm(BaseTask):
@@ -24,7 +25,9 @@ class ImageNorm(BaseTask):
         #unzip ndocs
         print((os.path.join(base.BEEHOME,self.train_dir+'/*')))
         images = [x for x in glob.glob(os.path.join(base.BEEHOME,self.train_dir+'/*'))]
-        print(images)
+
+        img_to_matrix(images[0])
+
         #normalize one at a time
 
         #save somewhere
