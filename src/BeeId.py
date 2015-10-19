@@ -38,15 +38,25 @@ class ImageNorm(BaseTask):
         data = []
         for i,image in enumerate(images):
 
+            #image is np array of 3-element tuples
+            print(image.shape)
+            print('image: ',image[0])
+
+            #we can reduce the colorspace 
+                
+            #we can flatten each color 
+
+
             img = flatten_image(image)
             print(img[1:5])
 
-            print(img.shape)
+            #print(img.shape)
+            print(type(img))
             data.append(img)
 
         # data = np.array(data)
 
-        print(data[0].shape)
+        print(data)
 
 
 
