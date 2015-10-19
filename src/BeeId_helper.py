@@ -18,6 +18,6 @@ def flatten_image(img):
     print(img)
     s = img.shape[0] * img.shape[1]
     print(s)
-    img_wide = [(x[0],x[1],x[2]) for x  in img.reshape(1, s)]
+    img_wide = [(x[0],x[1],x[2]) for x  in img.reshape(1, s)]~
 
     return img_wide[0]
