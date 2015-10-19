@@ -19,6 +19,7 @@ class ImageNorm(BaseTask):
     ndocs = luigi.IntParameter(default=10)
     test_dir = luigi.Parameter(default='test')
     train_dir = luigi.Parameter(default='train')
+    train_label = luigi.Parameter(default='train_labels.csv')
 
     # def complete(self):
     #     return False
@@ -29,47 +30,67 @@ class ImageNorm(BaseTask):
 
         #unzip ndocs
         print((os.path.join(base.BEEHOME,self.train_dir+'/*')))
-        images = [x for x in glob.glob(os.path.join(base.BEEHOME,self.train_dir+'/*'))]
+        image_files = [x for x in glob.glob(os.path.join(base.BEEHOME,self.train_dir+'/*'))]
         #print(images)
         #images  = map(lambda x: img_to_matrix(x),images)
-        images = [img_to_matrix(x) for x in images[0:10]]
-          
+        images = [(x,img_to_matrix(x)) for x in image_files[0:100]]
+
+        label_df = pd.read_csv(os.path.join(base.BEEHOME, self.train_label))
 
         data = []
-        for i,image in enumerate(images):
+        for i,image_tuple in enumerate(images):
 
+            image_f,image = image_tuple
             #image is np array of 3-element tuples
-            print(image.shape)
-            print('image: ',image[0])
-
-            #we can reduce the colorspace 
-                
-            #we can flatten each color 
 
 
-            img = flatten_image(image)
-            print(img[1:5])
+            #we can reduce the colorspace and or filter
 
-            #print(img.shape)
-            print(type(img))
+
+            #we can flatten each color - we
+            r,g,b = zip(*image)
+
+            imgN  = image_f.split('.')[-2]
+            imgN = np.int(imgN.split('/')[-1])
+            
+            img = {'imgN':imgN,'r':r,'g':g,'b':b,'label':(label_df[label_df.id==imgN]).genus}
+
+            #print(len(r))
+
+
+            #img = flatten_image(r)
+
             data.append(img)
 
         # data = np.array(data)
 
-        print(data)
-
-
+        #print(data)
 
         pca = RandomizedPCA(n_components=2)
 
-        X = pca.fit_transform(data)
 
-        print(X.shape)
-        df = pd.DataFrame({"x": X[:, 0], "y": X[:, 1]}) #, "label":np.where(y==1, "check", "driver's license")})
+        # in the future peform a more intellent color reduction/aggregation
+        just_r = [x['r'] for x in data]
+
+
+        data = just_r
+        X = zip(pca.fit_transform(data),[x['label'] for x in data])
+
+        print(X[0])
+
+
+        # grab some labels
+        print(os.path.join(base.BEEHOME,self.train_label))
+        label_df = pd.read_csv(os.path.join(base.BEEHOME, self.train_label))
+
+        print(label_df.head())
+
+
+        #df = pd.DataFrame({"x": X[:, 0], "y": X[:, 1]}, "label":np.where(y==1, "check", "driver's license")})
         colors = ["red", "yellow"]
         #for label, color in zip(df['label'].unique(), colors):
         for color in colors:
-            plt.scatter(df['x'], df['y'], c=color) 
+            plt.scatter(df['x'], df['y'], c=color)
             #plt.scatter(df[mask]['x'], df[mask]['y'], c=color) #, label=label)
         plt.legend()
         plt.show()
