@@ -33,7 +33,7 @@ class ImageNorm(BaseTask):
         image_files = [x for x in glob.glob(os.path.join(base.BEEHOME,self.train_dir+'/*'))]
         #print(images)
         #images  = map(lambda x: img_to_matrix(x),images)
-        images = [(x,img_to_matrix(x)) for x in image_files[0:200]]
+        images = [(x,img_to_matrix(x)) for x in image_files[0:120]]
 
         label_df = pd.read_csv(os.path.join(base.BEEHOME, self.train_label))
 
